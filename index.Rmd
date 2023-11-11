@@ -1,0 +1,9 @@
+---
+title: "GitHub Website"
+author: "Nolan Dulude"
+date: "2023-11-06"
+output: html_document
+---
+
+# Welcome
+## Feel free to check out the about me tab or the projects tab
