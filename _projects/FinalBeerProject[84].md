@@ -2,7 +2,7 @@
 layout: page
 title: Case Study 1
 description: Beer
-img: assets/img/12.jpg
+img: assets/img/beerpicture.jpg
 importance: 1
 category: work
 ---
