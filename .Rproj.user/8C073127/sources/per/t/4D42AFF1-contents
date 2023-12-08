@@ -1,0 +1,12 @@
+name: "my-website"
+navbar:
+  title: "My Website"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "About Me"
+      href: AboutMe.html
+    - text: "Data Science Projects"
+      href: FinalBeerProject[84].html
+      text: "Beer-app2"
+      href: 

@@ -1,0 +1,143 @@
+---
+title: "Week 12 FLS"
+output: html_document
+date: "2023-11-05"
+runtime: shiny
+---
+
+```{r}
+library(shiny)
+library(ggplot2)
+library(dplyr)
+df1 <-choose.files()
+beer <- read.csv(df1)
+
+df2 <- choose.files()
+breweries <- read.csv(df2)
+
+
+head(beer)
+head(breweries)
+summary(beer)
+summary(breweries)
+
+
+colnames(beer)[1] = "beer_name"
+colnames(breweries)[2] = "brewery_name"
+colnames(breweries)[1] = "Brewery_id"
+
+
+the_beer_data <- merge(beer, breweries)
+head(the_beer_data)
+summary(the_beer_data)
+the_beer_data<- na.omit(the_beer_data)
+the_beer_data <- the_beer_data[order(the_beer_data$State), ]
+
+
+ui <- fluidPage(
+  titlePanel("Beer Data Analysis"),
+  sidebarLayout(
+    sidebarPanel(
+         radioButtons("plot_type", "Choose Plot Type:", 
+                   choices = c("Histogram", "Boxplot"),
+                   selected = "Histogram"),
+      selectInput("state_filter", "Filter by State:", 
+                   choices = c("All", unique(the_beer_data$State)),
+                   selected = "All"),
+      sliderInput("binwidth_slider", "Select Binwidth:",
+                  min = 0.01, max = 10, step = 0.01, value = 5),
+      radioButtons("variable", "Choose Variable:",
+                   choices = c("IBU", "ABV"),
+                   selected = "IBU"),
+      checkboxInput("regression_line", "Add Simple Linear Regression Line", value = FALSE),
+    ),
+    mainPanel(
+      uiOutput("plot_panel"),
+      plotOutput("scatterplot"),
+      plotOutput("additional_plot")
+    )
+  )
+)
+
+# Define the server
+server <- function(input, output) {
+  data <- reactive({
+    req(the_beer_data)
+    the_beer_data
+  })
+
+  output$state_filter <- renderUI({
+    state_choices <- unique(data()$State)
+    selectInput("state_filter", "Filter by State:", choices = c("All", state_choices), multiple = TRUE)
+  })
+
+  filtered_data <- reactive({
+    data_filtered <- data()
+    if (!"All" %in% input$state_filter) {
+      data_filtered <- filter(data_filtered, State %in% input$state_filter)
+    }
+    data_filtered
+  })
+
+  output$plot_panel <- renderUI({
+    if (input$plot_type == "Histogram") {
+      plotOutput("histogram_plot")
+    } else if (input$plot_type == "Boxplot") {
+      plotOutput("boxplot_plot")
+    }
+  })
+
+  # Create the histogram plot
+  output$histogram_plot <- renderPlot({
+  data_filtered <- filtered_data()
+  variable <- input$variable
+  binwidth <- input$binwidth_slider
+  ggplot(data_filtered, aes_string(x = variable)) +
+    geom_histogram(binwidth = binwidth, fill = "blue", color = "black", alpha = 0.7) +
+    labs(title = paste("Histogram of", variable), x = variable, y = "Frequency")
+})
+
+  # Create the boxplot
+  output$boxplot_plot <- renderPlot({
+    data_filtered <- filtered_data()
+    variable <- input$variable
+    ggplot(data_filtered, aes(x = "", y = .data[[variable]])) +
+      geom_boxplot(fill = "blue", color = "black", alpha = 0.7) +
+      labs(title = paste("Boxplot of", variable), x = "", y = variable)
+  })
+
+  # Create the scatter plot
+  output$scatterplot <- renderPlot({
+    data_filtered <- filtered_data()
+    p <- ggplot(data_filtered, aes(x = IBU, y = ABV)) +
+      geom_point(color = "purple", alpha = 0.7) +
+      labs(title = "Scatter Plot of IBU vs. ABV", x = "IBU", y = "ABV")
+    if (input$regression_line) {
+      p <- p + geom_smooth(method = "lm", se = FALSE, color = "red")
+    }
+    p
+  })
+
+  # Add an additional plot from your analysis
+  output$additional_plot <- renderPlot({
+    data_filtered <- filtered_data()
+    # Replace with your custom analysis and plot
+    # For example, a barplot of the number of beers per style:
+    style_counts <- data_filtered %>%
+      group_by(Style) %>%
+      summarise(Count = n()) %>%
+      arrange(desc(Count))
+    ggplot(style_counts, aes(x = reorder(Style, -Count), y = Count)) +
+      geom_bar(stat = "identity", fill = "orange") +
+      labs(title = "Number of Beers per Style", x = "Style", y = "Count") +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  })
+}
+
+shinyApp(ui, server)
+```
+
+
+```{r}
+
+
