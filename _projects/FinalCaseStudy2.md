@@ -9,6 +9,8 @@ category: work
 ---
 <!DOCTYPE html>
 
+Here is my app for the Case Study 2.  This shows the relationship between Attrition and different variables through Histograms and Scatter plots. https://nolandulude.shinyapps.io/EmployeeAnalysisApp/
+
 <html>
 
 <head>
