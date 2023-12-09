@@ -9,7 +9,9 @@ category: work
 
 <!DOCTYPE html>
 
-Here is a link to my R shiny App for this project https://nolandulude.shinyapps.io/beer-app2/
+Here is a link to my R shiny App for this project.
+
+<a href='#'>https://nolandulude.shinyapps.io/beer-app2/</a> 
 
 <html>
 
