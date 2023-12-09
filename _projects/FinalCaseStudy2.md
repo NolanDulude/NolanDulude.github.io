@@ -13,6 +13,10 @@ Here is my app for the Case Study 2.  This shows the relationship between Attrit
 
 <a href="https://nolandulude.shinyapps.io/EmployeeAnalysisApp/">https://nolandulude.shinyapps.io/EmployeeAnalysisApp/</a> 
 
+Here is also a link to my Final Presentation
+
+<a href="https://youtu.be/RZe3eAU8_Ik">https://youtu.be/RZe3eAU8_Ik</a>
+
 
 <html>
 
