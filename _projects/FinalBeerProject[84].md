@@ -7,11 +7,10 @@ importance: 1
 category: work
 ---
 
-<!DOCTYPE html>
 
 Here is a link to my R shiny App for this project.
 
-<a href='url'>https://nolandulude.shinyapps.io/beer-app2/</a> 
+<a href="https://nolandulude.shinyapps.io/beer-app2/">https://nolandulude.shinyapps.io/beer-app2/</a> 
 
 <html>
 
